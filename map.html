@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>map测试</title>
+</head>
+<body>
+    <script>
+        const loadApp = (app) => {
+            return new Promise((resolve, reject) => {
+                setTimeout(()=> {
+                    console.log(app.delay)
+                    resolve()
+                }, app.delay)
+            })
+        }
+        const toPromise = async (app) => {
+            await loadApp(app);
+            app.tt = app.value + 'come';
+            console.log('app', app)
+            return app;
+        }
+        const arr = [
+            {
+                value: 1,
+                delay: 5000,
+            },
+            {
+                value: 2,
+                delay: 1000,
+            }
+        ]
+        async function load() {
+            // const arrs = await Promise.all(arr.map(toPromise))
+            // console.log(333, arrs)
+            // arr.map(toPromise)
+            // for(let i = 0; i < arr.length; i++) {
+            //     await toPromise(arr[i])
+            // }
+            arr.map(async (app) => {
+                await toPromise(app)
+                return app;
+            })
+
+        }
+        load()
+        setTimeout(()=> {
+            console.log('ttt', arr)
+        },3000)
+        
+        // map使用promise执行数组中的元素 没有加载顺序，一起加载，不分先后
+        // map循环即使加await也是并发加载，没有顺序
+        // for循环 toPromise也没有加载顺序
+        // for循环中如果加上await 就会有加载顺序，必须前一个元素执行完成之后才会执行后一个元素，即使前一个元素需要5秒完成，后一个也不会先执行，原地等待，必须等第一个完成才会执行
+        
+    </script>
+</body>
+</html>
